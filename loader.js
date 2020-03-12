@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2019-12-16 11:21:45
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-03-12 15:56:43
+ * @LastEditTime: 2020-03-12 20:05:53
  */
 // var loaderUtils = require('loader-utils')
 var getComponentConfig = require('./utils/getComponentConfig')
@@ -11,6 +11,7 @@ var editModulePath = require('./js/editModulePath')
 var hotUpdateJs = require('./js/hot.update')
 var getStyleLoader = require('./style/getStyleLoader')
 module.exports = function (content, map, meta) {
+  if (~content.indexOf('didiByYamjsLoader')) return content
   let id = ''
   let isExtra = true
   // 先检测是否是yamjs app
@@ -25,10 +26,15 @@ module.exports = function (content, map, meta) {
   }
   content = editModulePath(content)
   let stylePaths = getAllStylePath(content)
+  let isDo = []
   stylePaths.forEach(v => {
-    if (v) {
-      content = content.replace(new RegExp(v.text, 'g'), getStyleLoader({ isExtra, id, suffix: v.suffix }) + v.text)
+    if (v && !~isDo.indexOf(v.text)) {
+      content = content.replace(new RegExp(v.text), getStyleLoader({ isExtra, id, suffix: v.suffix }) + v.text)
+      isDo.push(v.text)
     }
   })
+  content += `
+  /* didiByYamjsLoader */
+  `
   return content
 }
