@@ -1,18 +1,30 @@
 {
   "name": "yamjs-loader",
-  "version": "0.1.0",
-  "description": "",
+  "version": "1.0.0",
+  "description": "this is yamjs loader",
   "main": "loader.js",
-  "directories": {
-    "lib": "lib"
+  "dependencies": {
+    "loader-utils": "^1.4.0"
   },
+  "devDependencies": {},
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/xueliangGit/yamjs-loader.git"
+  },
+  "keywords": [
+    "yamjs",
+    "yamjs-loader",
+    "yamjs-hotupdate",
+    "laoder",
+    "hotupdate"
+  ],
   "author": "",
   "license": "ISC",
-  "dependencies": {
-    "loader-utils": "^1.4.0"
-  }
+  "bugs": {
+    "url": "https://github.com/xueliangGit/yamjs-loader/issues"
+  },
+  "homepage": "https://github.com/xueliangGit/yamjs-loader#readme"
 }
