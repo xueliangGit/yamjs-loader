@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2020-03-11 10:51:25
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-03-12 20:06:10
+ * @LastEditTime: 2020-03-29 19:02:57
  */
 // let isReadey = false
 let path = require('path')
@@ -19,6 +19,8 @@ module.exports = function (context, jsPath) {
   let Appname = null
   if (AppnameArray) {
     Appname = AppnameArray[0].split('default')[1]
+    Appname = Appname.split(';')[0]
+    Appname = Appname.split('\n')[0]
   }
   if (Appname) {
 
