@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2020-03-11 15:27:21
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-09-10 20:04:45
+ * @LastEditTime: 2020-09-10 20:30:52
  */
 var Yam = null
 let appsInstalled = (window.appsInstalled || (window.appsInstalled = {}))
@@ -28,7 +28,7 @@ function yamHotReload () {
   return {
     name: 'hot-reload-load',
     install: function (target) {
-      target.addLifeCycleCall('$beforeCreate', function () {
+      (target.addLifeCycleCall || target.addGlobalLife)('$beforeCreate', function () {
         addApp(this)
       })
     }
