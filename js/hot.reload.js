@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2020-03-11 15:27:21
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-03-12 15:49:18
+ * @LastEditTime: 2020-09-10 20:04:45
  */
 var Yam = null
 let appsInstalled = (window.appsInstalled || (window.appsInstalled = {}))
@@ -75,7 +75,7 @@ function yamHotReloadDestroy () {
   return {
     name: 'hot-reload-destory',
     install: function (target) {
-      target.addLifeCycleCall('$beforeDestroy', function () {
+      (target.addLifeCycleCall || target.addGlobalLife)('$beforeDestroy', function () {
         delApp(this)
       })
     }
