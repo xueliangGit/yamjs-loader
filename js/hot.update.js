@@ -2,11 +2,11 @@
  * @Author: xuxueliang
  * @Date: 2020-03-11 10:51:25
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-03-29 19:02:57
+ * @LastEditTime: 2020-09-10 20:22:53
  */
 // let isReadey = false
 let path = require('path')
-const isDev = process.env.NODE_ENV !== 'production'
+let { isDev } = require('../utils/conf')
 module.exports = function (context, jsPath) {
   if (!isDev) return context
   // if (isReadey) {
@@ -28,8 +28,8 @@ module.exports = function (context, jsPath) {
     \n/* yamjs hot reload */\n
     if (module.hot) {
       // 实现YAMJS热更新
-      var hotAPI = require('${ hotPath }')
-      hotAPI.install(Yam,${Appname })
+      var hotAPI = require('${ hotPath}')
+      hotAPI.install(Yam,${Appname})
       module.hot.accept();
     }
     `
