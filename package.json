@@ -1,6 +1,6 @@
 {
   "name": "yamjs-loader",
-  "version": "1.0.9",
+  "version": "1.1.0",
   "description": "this is yamjs loader",
   "main": "loader.js",
   "dependencies": {

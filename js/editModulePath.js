@@ -2,10 +2,9 @@
  * @Author: xuxueliang
  * @Date: 2020-03-10 18:53:00
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-09-10 20:23:47
+ * @LastEditTime: 2020-09-11 12:35:11
  */
-let { isDev } = require('../utils/conf')
-let laoderPath = isDev ? 'yamjs/dist/loader/yam.esm.js' : 'yamjs/dist/loader/yam.esm.min.js'
+let laoderPath = 'yamjs/dist/loader/yam.esm.js'
 module.exports = function editModulePath (context) {
   let match1 = context.match(/from\s+'yamjs'/g)
   let match2 = context.match(/from\s+"yamjs"/g)

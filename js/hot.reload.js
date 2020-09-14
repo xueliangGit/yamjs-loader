@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2020-03-11 15:27:21
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-09-10 20:30:52
+ * @LastEditTime: 2020-09-14 12:44:31
  */
 var Yam = null
 let appsInstalled = (window.appsInstalled || (window.appsInstalled = {}))
@@ -18,10 +18,10 @@ function delApp (app) {
 function updateApp (name) {
   let allApps = appsInstalled[name]
   if (allApps) {
-    Object.keys(allApps).forEach(v => {
-      allApps[v].$forceUpdate()
+    let keys = Object.keys(allApps)
+    keys.forEach((v, i) => {
+      allApps[v].$forceUpdate({ isLast: keys.length - 1 === i })
     })
-    // console.log('[ ', name, ' ] 组件更新成功')
   }
 }
 function yamHotReload () {
@@ -34,35 +34,70 @@ function yamHotReload () {
     }
   }
 }
+function isUpdate (a, b) {
+  let isJs
+  let isHtml
+  let isStyle
+  let keys = Object.getOwnPropertyNames(b)
+  if (a.constructor._oriStyle.toString() !== b.constructor._oriStyle.toString()) {
+    isStyle = true
+  }
+  for (let i = 0, item; item = keys[i]; i++) {
+    if (!a[item]) {
+      isJs = true
+      return { isJs }
+    }
+    if (a[item].toString() !== b[item].toString()) {
+      if (item === 'render') {
+        isHtml = true
+      } else {
+        isJs = true
+        return { isJs }
+      }
+    }
+  }
+  return { isJs, isHtml, isStyle }
+}
+function rerednerToElm (context, ClassFn) {
+  let newCopm = new ClassFn()
+  let elm = context.elm
+  newCopm.$slotSymbol = context.$slotSymbol
+  let newElm = elm.cloneNode(true)
+  newElm.innerHtml = ''
+  newElm._runfn_ = elm._runfn_
+  newCopm.renderAt(newElm)
+  elm.parentElement.replaceChild(newElm, elm)
+}
 function yamHotReloadUpdate () {
   return {
     name: 'hot-reload-update',
     install: function (target) {
-      target.addPrototype('$forceUpdate', function () {
+      target.addPrototype('$forceUpdate', function ({ isLast }) {
+        let newComClass = comps[this._tagName]
         try {
-          if (this instanceof comps[this._tagName] || this._editCalss instanceof comps[this._tagName]) {
+          console.log(this instanceof newComClass)
+          if (this instanceof newComClass || this._editCalss instanceof newComClass) {
             // this.update()
           } else {
-            let newCopm = new comps[this._tagName]()
-            let newElm = document.createDocumentFragment()
-            newElm.getAttribute = (v) => {
-              return this.elm.getAttribute(v)
+            let { isHtml, isJs, isStyle } = isUpdate(this.__proto__, newComClass.prototype)
+            if (isHtml) {
+              this.__proto__.render = newComClass.prototype.render
+              this.update()
+            } else if (isJs) {
+              if (this.$closestParentSymbol) {
+                this.$closestParentSymbol.update()
+              } else {
+                // console.log('从新渲染')
+                rerednerToElm(this, newComClass)
+              }
+            } else if (isStyle) {
+              // 更新isStyle
+              if (isLast) {
+                this.__proto__.constructor._oriStyle = newComClass.prototype.constructor._oriStyle
+              }
+              this._style = (Yam._gSS ? Yam._gSS(this._cid, newComClass.prototype.constructor._oriStyle) : newComClass.prototype.constructor._oriStyle).toString() // getStyleStr(this._cid, style) 使用了loader 后不需要这个了
+              this.initStyle()
             }
-            newElm.innerHTML = ''
-            newElm.isInited = false
-            newElm._parentElement = this.elm._parentElement
-            newElm._parentNode = this.elm._parentNode
-            newCopm.$closestParentSymbol = this.$closestParentSymbol
-            newCopm.renderAt(newElm, this.props)
-            this.elm.innerHTML = ''
-            this.elm.appendChild(newElm)
-            this.elm.$ComponentSymbol = newCopm
-            newCopm.elm = this.elm
-            newCopm.$closestParentSymbol && newCopm.$closestParentSymbol.ChildComponentsManage.add(newCopm)
-            newCopm.mutation = this.mutation
-            this._is_hot_update = true
-            this.__beforeDisconnectedCallback()
-            this.__disconnectedCallback()
           }
         } catch (e) {
           console.log(e)

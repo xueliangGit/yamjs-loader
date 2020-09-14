@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2019-12-16 11:21:45
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-03-12 20:05:53
+ * @LastEditTime: 2020-09-14 12:45:57
  */
 // var loaderUtils = require('loader-utils')
 var getComponentConfig = require('./utils/getComponentConfig')

@@ -2,7 +2,7 @@
  * @Author: xuxueliang
  * @Date: 2020-03-07 15:33:45
  * @LastEditors: xuxueliang
- * @LastEditTime: 2020-03-29 19:52:51
+ * @LastEditTime: 2020-09-14 12:45:24
  */
 const loaderUtils = require('loader-utils')
 const getConfig = require('./getConfig')
@@ -42,7 +42,7 @@ function _getStrByStyle (_id, style, query) {
         if (~v.indexOf('[root]')) {
           return v.replace('[root]', getDomStyleFlag(_id + '-root')) // }
         }
-        return styleConfig.scope ? getIdStyle(v.replace(' {', '').replace('{', ''), getDomStyleFlag(_id)) + '{' : v
+        return styleConfig.scoped ? getIdStyle(v.replace(' {', '').replace('{', ''), getDomStyleFlag(_id)) + '{' : v
       }
       return v
     }).join('\\n')
